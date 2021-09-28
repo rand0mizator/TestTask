@@ -8,18 +8,26 @@
   <title>Тестовое задание Суслов</title>
 </head>
 <body>
+
 <p><h1>Выберите изображение для обработки</h1></p>
 <form method="post" enctype="multipart/form-data">
   {% csrf_token %}
   {{ form.as_p }}
-  <button type="submit">Загрузить</button>
+<!--  <button type="submit">Загрузить</button>-->
+  <h1>Введите НЕХ-код цвета для подсчета соответствующих пикселей</h1>
+  <input type="text" name="color">
+<button type="submit">Поехали!</button>
 </form>
+
+
 {% if img_obj %}
   <h3>Загруженное изображение</h3>
   <img src="{{ img_obj.image.url}}" alt="connect" style="max-height:300px">
   <h3>На изображении больше {{ pixel }} пикселей</h3>
+  <h3>Количество пикселей {{ color }} цвета = {{ pixel_count }}</h3>
   <h4>Белые пиксели - это пиксели с кодом RGB = 255, 255, 255</h4>
   <h4>Черные пиксели - это пиксели с кодом RGB = 0, 0, 0</h4>
 {% endif %}
+
 </body>
 </html>
