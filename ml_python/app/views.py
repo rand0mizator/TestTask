@@ -1,32 +1,28 @@
 from django.shortcuts import render, redirect
-from app.forms import ImageForm
+from .forms import ImageForm
+from .utils import count_pixels
 
-import cv2
-import numpy as np
 from PIL import ImageColor
 
 
 def index(request):
     if request.method == 'POST':
-        color = request.POST["color"]
+        color = '#' + request.POST["color"]
         try:
-            color = ImageColor.getcolor(color, 'RGB')
+            color = ImageColor.getrgb(color)
         except ValueError:
-            color = '#000000'
+            color = None
         form = ImageForm(request.POST, request.FILES)
         if form.is_valid():
-            uploaded_file_in_memory = request.FILES["image"].read()
+            uploaded_file = request.FILES['image']
+            print(type(uploaded_file))
             form.save()
             img_obj = form.instance
-            nparr = np.fromstring(uploaded_file_in_memory, np.uint8)
-            img = cv2.imdecode(nparr, cv2.IMREAD_UNCHANGED)
-            black = np.sum(img == 0)
-            white = np.sum(img == 255)
-            pixel_count = np.sum(img == color)
-            pixel = 'черных' if black > white else 'белых'
-            return render(request, 'index.html', {'form': form, 'img_obj': img_obj,
-                                                  'pixel': pixel, 'pixel_count': pixel_count,
-                                                  'color': color})
+            black = count_pixels(uploaded_file, (0, 0, 0))
+            white = count_pixels(uploaded_file, (255, 255, 255))
+            pixel_count = count_pixels(uploaded_file, color)
+            return render(request, 'index.html', {'form': form, 'img_obj': img_obj, 'pixel_count': pixel_count,
+                                                  'white': white, 'black': black, 'color': color})
     else:
         form = ImageForm()
     return render(request, 'index.html', {'form': form})

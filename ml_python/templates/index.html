@@ -8,25 +8,48 @@
   <title>Тестовое задание Суслов</title>
 </head>
 <body>
-
-<p><h1>Выберите изображение для обработки</h1></p>
+<p>
+<h2>Выберите изображение для обработки и введите НЕХ-код цвета <br>
+  для подсчета соответствующих пикселей <br>
+  (без символа #, в формате RRGGBB)</h2>
+</p>
 <form method="post" enctype="multipart/form-data">
   {% csrf_token %}
   {{ form.as_p }}
-<!--  <button type="submit">Загрузить</button>-->
-  <h1>Введите НЕХ-код цвета для подсчета соответствующих пикселей</h1>
-  <input type="text" name="color">
-<button type="submit">Поехали!</button>
+  <p><input type="text" name="color"><br></p>
+  <p><button type="submit">Поехали!</button></p>
 </form>
 
 
 {% if img_obj %}
   <h3>Загруженное изображение</h3>
   <img src="{{ img_obj.image.url}}" alt="connect" style="max-height:300px">
-  <h3>На изображении больше {{ pixel }} пикселей</h3>
-  <h3>Количество пикселей {{ color }} цвета = {{ pixel_count }}</h3>
-  <h4>Белые пиксели - это пиксели с кодом RGB = 255, 255, 255</h4>
-  <h4>Черные пиксели - это пиксели с кодом RGB = 0, 0, 0</h4>
+{% endif %}
+
+{% if color != None %}
+  {% if pixel_count != -1 %}
+    <h3>Количество пикселей {{ color }} цвета = {{ pixel_count }}</h3>
+  {% else %}
+    <h3>Пиксели цвета {{ color }} не найдены</h3>
+  {% endif %}
+{% else %}
+  <h3>Цвет не задан</h3>
+{% endif %}
+
+{% if black > 0 %}
+  <h4>Количество черных пикселей (RGB = [0, 0, 0]): {{ black }}</h4>
+{% endif %}
+
+{% if white > 0 %}
+  <h4>Количество белых пикселей (RGB = [255, 255, 255]): {{ white }}</h4>
+{% endif %}
+
+{% if black > 0 and white > 0 %}
+  {% if black > white %}
+    <h4>На изображении больше черных пикселей</h4>
+  {% else %}
+    <h4>На изображении больше белых пикселей</h4>
+  {% endif %}
 {% endif %}
 
 </body>
