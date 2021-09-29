@@ -1,0 +1,16 @@
+from PIL import Image
+
+img = Image.new('RGB', (100, 100), color=(255, 0, 0))
+img.save('media\\test_imgs\\red_100x100.png')
+img = Image.new('RGB', (100, 100), color=(0, 255, 0))
+img.save('media\\test_imgs\\green_100x100.png')
+img = Image.new('RGB', (100, 100), color=(0, 0, 255))
+img.save('media\\test_imgs\\blue_100x100.png')
+img = Image.new('RGB', (100, 100), color=(255, 255, 255))
+img.save('media\\test_imgs\\white_100x100.png')
+img = Image.new('RGB', (100, 100), color=(0, 0, 0))
+img.save('media\\test_imgs\\black_100x100.png')
+img = Image.new('RGB', (100, 100), color=(128, 128, 128))
+img.save('media\\test_imgs\\128_100x100.png')
+img = Image.new('RGB', (100, 100), color=(128, 128, 128))
+img.save('media\\test_imgs\\128_100x100.jpg')
